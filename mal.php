@@ -76,3 +76,15 @@ class VirusTotalAPI {
     }
 }
 ?>
+/* Example of how it can be used Would like for it to be on a website and directly linked with JS too in some time
+
+$vtApi = new VirusTotalAPI('YOUR_API_KEY');
+
+// Scan a URL
+$response = $vtApi->scanURL('http://example.com');
+print_r($response);
+
+// Get the report for the URL
+$report = $vtApi->getURLReport('http://example.com');
+print_r($report);
+*/ 
