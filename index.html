@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malicious URL Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Malicious URL Detector</h1>
+<label for="url">Enter URL:</label>
+<input type="text" id="url" placeholder="http://example.com" required>
+<button id="scanButton">Scan URL</button>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('scanButton').onclick = function() {
+        const url = document.getElementById('url').value;
+        if (!url) {
+            alert('Please enter a URL.');
+            return;
+        }
+
+        fetch('scan.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: url })
+        })
+        .then(response => response.json())
+        .then(data => {
+            let resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h2>Scan Result:</h2>';
+            if (data.response_code === 1) {
+                resultDiv.innerHTML += `<p>URL is safe: ${data.positives} detections.</p>`;
+            } else {
+                resultDiv.innerHTML += `<p>Error: ${data.response_code}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+</body>
+</html>
