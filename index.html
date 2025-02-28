@@ -7,37 +7,87 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         input[type="text"] {
-            width: 300px;
+            width: calc(100% - 120px);
             padding: 10px;
             margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         button {
             padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
         }
         #result {
             margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #ecf0f1;
+        }
+        .safe {
+            color: #27ae60;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        .loading {
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
-<h1>Malicious URL Detector</h1>
-<label for="url">Enter URL:</label>
-<input type="text" id="url" placeholder="http://example.com" required>
-<button id="scanButton">Scan URL</button>
+<header>
+    <h1>Malicious URL Detector</h1>
+</header>
 
-<div id="result"></div>
+<div class="container">
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" placeholder="http://example.com" required>
+    <button id="scanButton">Scan URL</button>
+
+    <div id="result"></div>
+</div>
 
 <script>
     document.getElementById('scanButton').onclick = function() {
         const url = document.getElementById('url').value;
+        const resultDiv = document.getElementById('result');
+        
         if (!url) {
             alert('Please enter a URL.');
             return;
         }
+
+        resultDiv.innerHTML = '<p class="loading">Scanning...</p>';
 
         fetch('scan.php', {
             method: 'POST',
@@ -48,16 +98,16 @@
         })
         .then(response => response.json())
         .then(data => {
-            let resultDiv = document.getElementById('result');
             resultDiv.innerHTML = '<h2>Scan Result:</h2>';
             if (data.response_code === 1) {
-                resultDiv.innerHTML += `<p>URL is safe: ${data.positives} detections.</p>`;
+                resultDiv.innerHTML += `<p class="safe">URL is safe: ${data.positives} detections.</p>`;
             } else {
-                resultDiv.innerHTML += `<p>Error: ${data.response_code}</p>`;
+                resultDiv.innerHTML += `<p class="error">Error: ${data.response_code}</p>`;
             }
         })
         .catch(error => {
             console.error('Error:', error);
+            resultDiv.innerHTML = '<p class="error">An error occurred while scanning the URL.</p>';
         });
     }
 </script>
