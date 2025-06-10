@@ -70,7 +70,7 @@
 </header>
 
 <div class="container">
-    <label for="url">Enter URL:</label>
+    <label for="url">Enter URL :</label>
     <input type="text" id="url" placeholder="http://example.com" required>
     <button id="scanButton">Scan URL</button>
 
@@ -87,7 +87,7 @@
             return;
         }
 
-        resultDiv.innerHTML = '<p class="loading">Scanning...</p>';
+        resultDiv.innerHTML = '<p class="loading">Scanning....</p>';
 
         fetch('scan.php', {
             method: 'POST',
